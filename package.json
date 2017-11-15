@@ -1,0 +1,16 @@
+{
+  "name": "swobodalights",
+  "version": "1.0.0",
+  "description": "swobodalights website resource",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Jared Swoboda",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.16.2",
+    "react": "^16.1.1",
+    "react-dom": "^16.1.1"
+  }
+}
