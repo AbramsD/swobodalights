@@ -5,6 +5,7 @@
 <head>
 	<title>Swoboda Lights</title>
 	<link rel="stylesheet" type="text/css" href="/css/mainsite.css" />
+  <script type=text/javascript src="/js/launch.js",true></script>
 </head>
 <body>
 
@@ -38,19 +39,10 @@
     	statusChangeCallback(response);
     });
   }
-  function statusChangeCallback(response){
-  	if (response.status === 'connected'){
-    	console.log('logged in.');
-    }
-    else {
-    	console.log('response status: ' + response.status);
-    	console.log ('not logged in');
-    }
-  }
+
 </script>
-	<div id="message">
-	Hello World
-	</div>
-	<div class="fb-login-button" data-max-rows="1" data-size="medium" data-button-type="continue_with" data-show-faces="false" data-auto-logout-link="true" data-use-continue-as="false"></div>
-</body>
+  <div class="content">
+	     <div class="fb-login-button" data-max-rows="1" data-size="medium" data-button-type="continue_with" data-show-faces="false" data-auto-logout-link="true" data-use-continue-as="false" onlogin="checkLoginState();"></div>
+  </div>
+	<div class="content" id='main-content'></div>
 </html>

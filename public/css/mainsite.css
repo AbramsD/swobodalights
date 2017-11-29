@@ -1,3 +1,45 @@
 body {
 	background-color:  #49af33;
 }
+.content {
+	margin: auto;
+	width: 75%;
+	padding: 10px;
+	text-align: center;
+}
+.header {
+	width: 75%;
+}
+.button {
+  font: bold 45px Arial;
+  text-decoration: none;
+  text-align: center;
+  background-color: blue;
+  color: white;
+  border-top: 1px solid #CCCCCC;
+  border-right: 1px solid #333333;
+  border-bottom: 1px solid #333333;
+  border-left: 1px solid #CCCCCC;
+  width: 75%;
+  height: ;
+  padding: 10px;
+  margin: 5px;
+  display: inline-block;
+  cursor: pointer;
+}
+
+
+button {
+	color: white;
+	background-color: blue;
+	padding: 15px 32px;
+	text-align: center;
+	text-decoration: none;
+	font-size: 40px;
+	margin: 4px 2 px;
+	cursor: pointer;
+	width: 75%;
+}
+h1{
+	color: red;
+}

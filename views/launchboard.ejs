@@ -1,0 +1,11 @@
+<div>
+<img class=header src="/media/SwobodaLightsHeader.png" alt ="Swoboda Lights"/>
+</div>
+<h1>Launch!</h1>
+<% for (var i=0; i < shows.length; i++) { %>
+	<div>
+		<button class="button" onClick="onLaunch('<%=shows[i].id%>')">
+			<%= shows[i].name %>
+		</button>
+	</div>
+<% } %>
