@@ -35,21 +35,17 @@ function signAndCall(method, url, readyStatehandler){
 
 function onLaunch(showId){
 	signAndCall("Get", "/startShow?showId=" + showId, function(){
-		if (this.readyState == 4 && this.status == 200){
-        	setThanks();
-      	} else if(this.readyState == 4 && this.status == 409){
-      		setSorry();
-      	}
+		console.log("ready state: " +this.readyState);
+    console.log("status: " + this.status);
+    if (this.readyState == 4 && this.status == 200){
+        	document.getElementById("main-content").innerHTML = this.responseText;
+    }
+    else if(this.readyState == 4 && this.status != 200){
+      setSorry();
+    }
 	});
 }
 
-function setThanks(){
-	signAndCall("Get", "/thanks", function(){
-		if (this.readyState == 4 && this.status == 200){
-        	document.getElementById("main-content").innerHTML = this.responseText;
-        }
-	});
-}
 
 function setSorry(){
 	signAndCall("Get", "/sorry", function(){

@@ -79,16 +79,18 @@ app.get('/launchboard',
 
 app.get('/startShow', 
 	passport.authenticate("facebook-token"),
-	function(req,res){
-		console.log("In Start Show")
+	function(req,res, next){
+		//console.log("In Start Show")
 		//Check if the system is up.
-		console.log(fppAddress);
+		//console.log(fppAddress);
 		var status;
 		var url = fppAddress + "/fppxml.php?command=getFPPstatus"
 		fetch(url)
 			.then(function(response){
 				if(response.status != 200){
-					console.log("Non 200 response");
+					res.status(500);
+					res.send("Unable to contact light controller.");
+					//console.log("Non 200 response");
 					//Email Jared
 				} else {
 					return response.text();
@@ -98,50 +100,60 @@ app.get('/startShow',
 				return xml2js(body);
 			}).then(function (statusObj){ //Evaluate the system status
 				console.log(statusObj)
-				console.log(statusObj.Status.fppStatus[0])
 				if(statusObj.Status.fppStatus[0] == "0" ){
 					console.log("Status 0")
-					// FPP isn't running.  Return Out of Schedule.
+					res.status(200);
+					res.render("out_of_schedule")
 				} else if(statusObj.Status.fppStatus[0] == "1"){
-					console.log("status 1")
-
-					if(statusObj.Status.CurrentPlaylist[0] != "Daily_Playlist"){
-						console.log("not daily playlist")
-						res.status(409);
-						res.send("A show is already running");
+					//console.log("status 1")
+					var currentPlayList = statusObj.Status.CurrentPlaylist[0];
+					console.log("currentPlaylist: " + currentPlayList);
+					if(currentPlayList != "Daily_Playlist"){
+						// console.log ("In Not Daily Playlist")
+						res.status(200);
+						res.render("sorry_already_running", {station: station, playlist: currentPlayList});
 					}else{
-						console.log("able to launch show.")
+						// console.log("In Daily_Playlist");
 						var show_id = req.query.showId;
+
+						var lastRunTime = last_launch[show_id]
+						// console.log("Last Run: " + lastRunTime);
+						if(lastRunTime){
+							var timeDiff = Date.now() - lastRunTime;
+							if (timeDiff < 600000){
+								var resetTime = Math.ceil((600000 - timeDiff) / 60000)
+								//Shows been run in the last 10 minutes
+								res.status(200);
+								res.render("sorry_run_too_much", {showsresettime : resetTime})
+								return;
+							}
+						}
+
+						//console.log("able to launch show.")
+						
 						var url = fppAddress + "/fppxml.php?command=triggerEvent&id=" + show_id;
-						console.log("Stating Show Id:" + show_id)
-						console.log("URL: " + url)
+						//console.log("Stating Show Id:" + show_id)
+						//console.log("URL: " + url)
 						return fetch(url);
 					}
 
 				}
 			}).then(function(response){
 				if(response){
-					console.log("In Start Show fetch response")
-					console.log("startshow status:" + response);
+					//console.log("In Start Show fetch response")
+					//console.log("startshow status:" + response);
 					if(response.status == 200){
-					
+						last_launch[req.query.showId] = Date.now();
 						res.status(200);
 						res.render("thanks", {station: station});
 					}else {
-					
-						res.status(500)
-						res.send("Unable to Launch Show.")
+						//ping Jared
+						res.status(200)
+						res.render("unable_to_launch")
 					}
 				}
-			});
+			}).catch(next);
 			
-	
-		//Check Last Launch
-
-		//If last call within 15min
-		//send to sorry down.
-		//Attempted to Launch
-		//redirect to thank you.
 	});
 
 app.get('/thanks',
@@ -154,9 +166,7 @@ app.get('/thanks',
 app.get('/sorry',
 	passport.authenticate("facebook-token"),
 	function(req,res){
-		//Calculate time till available
-		var availableIn = {showsresettime: 10};
-		res.render("sorry_run_too_much", availableIn);
+		res.render("technical_difficulties");
 	});
 
 
