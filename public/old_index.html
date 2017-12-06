@@ -1,6 +1,4 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
+<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 	<title>Swoboda Lights</title>
@@ -10,6 +8,15 @@
 <body>
 
 <script>
+  
+  window.onpopstate = function(event) {    
+    console.log(event);
+    console.log(event.state);
+    if(event && event.state == null) {
+        location.reload(); 
+    }
+  }
+
   window.fbAsyncInit = function() {
     
     FB.init({
@@ -42,7 +49,12 @@
 
 </script>
   <div class="content">
-	     <div class="fb-login-button" data-max-rows="1" data-size="medium" data-button-type="continue_with" data-show-faces="false" data-auto-logout-link="true" data-use-continue-as="false" onlogin="checkLoginState();"></div>
+      <div>
+        <img class=header src="/media/SwobodaLightsHeader.png" alt ="Swoboda Lights"/>
+      </div>
+	     <div class="fb-login-button" data-max-rows="1" data-size="large" data-button-type="continue_with" data-show-faces="false" data-auto-logout-link="true" data-use-continue-as="false" onlogin="checkLoginState();"></div>
   </div>
-	<div class="content" id='main-content'></div>
+	<div class="content" id='main-content'>
+    Please Log With Facebook."
+  </div>
 </html>

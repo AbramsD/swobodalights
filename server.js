@@ -99,9 +99,8 @@ app.get('/startShow',
 			}).then(function(body){  //Convert the xml to an object
 				return xml2js(body);
 			}).then(function (statusObj){ //Evaluate the system status
-				console.log(statusObj)
+				
 				if(statusObj.Status.fppStatus[0] == "0" ){
-					console.log("Status 0")
 					res.status(200);
 					res.render("out_of_schedule")
 				} else if(statusObj.Status.fppStatus[0] == "1"){

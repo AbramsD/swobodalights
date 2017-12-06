@@ -28,6 +28,14 @@ body {
   cursor: pointer;
 }
 
+.loading{
+	display: inline;
+	position: relative;
+	padding: 10px;
+  	margin: 5px;
+  	width: 75%;
+  	height: ;
+}
 
 button {
 	color: white;

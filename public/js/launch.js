@@ -7,7 +7,7 @@ function statusChangeCallback(response){
     else {
     	console.log('response status: ' + response.status);
     	console.log ('not logged in');
-      document.getElementById("main-content").innerHTML = "";
+      document.getElementById("main-content").innerHTML = "Please Log in with Facebook";
     }
 }
 
@@ -34,10 +34,18 @@ function signAndCall(method, url, readyStatehandler){
 }
 
 function onLaunch(showId){
-	signAndCall("Get", "/startShow?showId=" + showId, function(){
-		console.log("ready state: " +this.readyState);
-    console.log("status: " + this.status);
+	var x = document.querySelectorAll(".button");
+  var i;
+  for (i = 0; i < x.length; i++) {
+    x[i].style.display = "none";
+  }
+
+  var gif = document.getElementById("loadingGif");
+  gif.style.visibility = "visible";
+
+  signAndCall("Get", "/startShow?showId=" + showId, function(){
     if (this.readyState == 4 && this.status == 200){
+          history.pushState({}, null, "");
         	document.getElementById("main-content").innerHTML = this.responseText;
     }
     else if(this.readyState == 4 && this.status != 200){
@@ -50,6 +58,7 @@ function onLaunch(showId){
 function setSorry(){
 	signAndCall("Get", "/sorry", function(){
 		if (this.readyState == 4 && this.status == 200){
+          history.pushState({}, null, "");
         	document.getElementById("main-content").innerHTML = this.responseText;
         }
 	});
