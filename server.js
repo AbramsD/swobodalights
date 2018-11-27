@@ -107,7 +107,7 @@ app.get('/startShow',
 					//console.log("status 1")
 					var currentPlayList = statusObj.Status.CurrentPlaylist[0];
 					console.log("currentPlaylist: " + currentPlayList);
-					if(currentPlayList != "Daily_Playlist"){
+					if(currentPlayList != "DailyPlaylist"){
 						// console.log ("In Not Daily Playlist")
 						res.status(200);
 						res.render("sorry_already_running", {station: station, playlist: currentPlayList});
