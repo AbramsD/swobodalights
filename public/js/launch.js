@@ -11,8 +11,7 @@ function statusChangeCallback(response){
     }
 }
 
-function buildLaunchBoard(response){
-    access_token = response.authResponse.accessToken;
+function buildLaunchBoard(){
     xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
       if (this.readyState == 4 && this.status == 200){
@@ -20,7 +19,6 @@ function buildLaunchBoard(response){
       }
     };
     xhttp.open("Get", "/launchBoard", true);
-    xhttp.setRequestHeader("access_token", response.authResponse.accessToken);
     xhttp.send();
 
 }
@@ -29,7 +27,6 @@ function signAndCall(method, url, readyStatehandler){
 	xhttp = new XMLHttpRequest();
 	xhttp.onreadystatechange = readyStatehandler;
 	xhttp.open(method, url, true);
-	xhttp.setRequestHeader("access_token", access_token);
 	xhttp.send();
 }
 

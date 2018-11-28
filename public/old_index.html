@@ -8,51 +8,12 @@
 <body>
 
 <script>
-  
-  window.onpopstate = function(event) {    
-    console.log(event);
-    console.log(event.state);
-    if(event && event.state == null) {
-        location.reload(); 
-    }
-  }
-
-  window.fbAsyncInit = function() {
-    
-    FB.init({
-      appId      : '322162728259013',
-      cookie     : true,
-      xfbml      : true,
-      version    : 'v2.11'
-    });
-      
-    FB.AppEvents.logPageView();   
-   
-    FB.getLoginStatus(function(response) {
-    	statusChangeCallback(response);
-	});  
-  };
-
-  (function(d, s, id){
-     var js, fjs = d.getElementsByTagName(s)[0];
-     if (d.getElementById(id)) {return;}
-     js = d.createElement(s); js.id = id;
-     js.src = "https://connect.facebook.net/en_US/sdk.js";
-     fjs.parentNode.insertBefore(js, fjs);
-   }(document, 'script', 'facebook-jssdk'));
-
-  function checkLoginState() {
-  	FB.getLoginStatus(function(response) {
-    	statusChangeCallback(response);
-    });
-  }
-
+  window.onload = buildLaunchBoard();
 </script>
   <div class="content">
       <div>
         <img class=header src="/media/SwobodaLightsHeader.png" alt ="Swoboda Lights"/>
       </div>
-	     <div class="fb-login-button" data-max-rows="1" data-size="large" data-button-type="continue_with" data-show-faces="false" data-auto-logout-link="true" data-use-continue-as="false" onlogin="checkLoginState();"></div>
   </div>
 	<div class="content" id='main-content'>
     Please Log With Facebook."

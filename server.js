@@ -1,13 +1,10 @@
 var express = require ('express'),
 	app = express(),
 	port = process.env.PORT || 3000,
-	passport = require('passport'),
-	FacebookTokenStrategy = require('passport-facebook-token'),
-	cookieParser = require('cookie-parser'),
-	session = require('express-session'),
 	fppAddress = process.env.SHOWURL,
 	fetch = require('node-fetch'),
 	xml2js = require('xml2js-es6-promise'),
+	rateLimit = require("express-rate-limit"),
 	station = process.env.FMSTATION;;
 
 
@@ -19,38 +16,16 @@ var path = require('path');
 var shows = require('./Shows.json');
 var last_launch = {};
 
-passport.use(new FacebookTokenStrategy({
-		clientID: process.env.CLIENTID,
-		clientSecret: process.env.CLIENT_SECRET
-	},
-	function(accessToken, refreshToken, profile, done){
-		var user = {
-        'email': profile.emails[0].value,
-        'name' : profile.name.givenName + ' ' + profile.name.familyName,
-        'id'   : profile.id,
-        'token': accessToken
-    }
-		return done(null,user);
-	}));
-
-passport.serializeUser(function(user, cb) {
-  cb(null, user);
-});
-
-passport.deserializeUser(function(obj, cb) {
-  cb(null, obj);
+const limiter = rateLimit({
+  windowMs: 5 * 60 * 1000, // 5 minutes
+  max: 30 // limit each IP to 100 requests per windowMs
 });
 
 
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
-
-app.use(cookieParser());
+app.use(limiter);
 app.use(bodyParser.urlencoded({extended: true}));
-app.use(session({secret: 'keyboard cat', resave: true, saveUninitialized: true}));
-
-app.use(passport.initialize());
-app.use(passport.session());
 
 app.use(express.static('public'));
 
@@ -60,25 +35,12 @@ app.get('/', function(req,res){
 	});
 
 
-app.get('/login/facebook/return',
-	passport.authenticate('facebook-token', {failureRedirect: '/login'}),
-	function(req, res){
-		res.redirect('/');
-	});
-
-
 app.get('/launchboard',
-	passport.authenticate("facebook-token"),
 	function(req,res){
-		if (req.user){
-			res.render("launchboard", shows);
-		} else {
-			res.send(404);
-		}
+		res.render("launchboard", shows);
 	});
 
 app.get('/startShow', 
-	passport.authenticate("facebook-token"),
 	function(req,res, next){
 		//console.log("In Start Show")
 		//Check if the system is up.
@@ -156,23 +118,16 @@ app.get('/startShow',
 	});
 
 app.get('/thanks',
-	passport.authenticate("facebook-token"),
 	function(req,res){
 		var station = process.env.FMSTATION;
 		res.render("thanks", {station: station});
 	});
 
 app.get('/sorry',
-	passport.authenticate("facebook-token"),
 	function(req,res){
 		res.render("technical_difficulties");
 	});
 
-
-app.get('/logout', function(req,res){
-	req.logout();
-	res.redirect('/');
-});
 
 app.listen(port);
 
