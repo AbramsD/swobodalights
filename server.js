@@ -69,7 +69,7 @@ app.get('/startShow',
 					//console.log("status 1")
 					var currentPlayList = statusObj.Status.CurrentPlaylist[0];
 					console.log("currentPlaylist: " + currentPlayList);
-					if(currentPlayList != "DailyPlaylist"){
+					if(currentPlayList != "DailyPlaylist" && currentPlayList != "WeekendDaily"){
 						// console.log ("In Not Daily Playlist")
 						res.status(200);
 						res.render("sorry_already_running", {station: station, playlist: currentPlayList});
@@ -128,6 +128,12 @@ app.get('/sorry',
 		res.render("technical_difficulties");
 	});
 
+app.get('/feedback', 
+	function(req, res){
+		res.render("feedback");
+	});
+
+app.post('/feedback');
 
 app.listen(port);
 
