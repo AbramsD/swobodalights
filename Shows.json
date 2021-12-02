@@ -1,8 +1,13 @@
 {
 	"shows": [
 		{
-			"id": "1_6",
-			"name": "2019's Show",
+			"id": "2021_Main_Playlist",
+			"name": "2021's Show",
+			"videos": []
+		},
+		{
+			"id": "Go_Chiefs",
+			"name": "Go Chiefs",
 			"videos": []
 		}
 	]
