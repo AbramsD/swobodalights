@@ -46,7 +46,7 @@ app.get('/startShow',
 		//Check if the system is up.
 		//console.log(fppAddress);
 		var status;
-		var url = fppAddress + "/fppxml.php?command=getFPPstatus"
+		var url = fppAddress + "/api/fppd/status"
 		fetch(url)
 			.then(function(response){
 				if(response.status != 200){
@@ -59,15 +59,15 @@ app.get('/startShow',
 				}
 
 			}).then(function(body){  //Convert the xml to an object
-				return xml2js(body);
+				return JSON.parse(body);
 			}).then(function (statusObj){ //Evaluate the system status
 				
-				if(statusObj.Status.fppStatus[0] == "0" ){
+				if(statusObj.status == "0" ){
 					res.status(200);
 					res.render("out_of_schedule")
-				} else if(statusObj.Status.fppStatus[0] == "1"){
+				} else if(statusObj.status == "1"){
 					//console.log("status 1")
-					var currentPlayList = statusObj.Status.CurrentPlaylist[0];
+					var currentPlayList = statusObj.current_playlist.playlist;
 					console.log("currentPlaylist: " + currentPlayList);
 					if(currentPlayList != "DailyPlaylist" && currentPlayList != "WeekendDaily"){
 						// console.log ("In Not Daily Playlist")
@@ -92,10 +92,23 @@ app.get('/startShow',
 
 						//console.log("able to launch show.")
 						
-						var url = fppAddress + "/fppxml.php?command=triggerEvent&id=" + show_id;
+						var url = fppAddress + "/api/command" 
+						var postBody = {
+							command : "Insert Playlist Immediate",
+							args : [
+							  show_id,
+							  "0",
+							  "0",
+							  "false"
+							]
+						  };
 						//console.log("Stating Show Id:" + show_id)
 						//console.log("URL: " + url)
-						return fetch(url);
+						return fetch(url, {
+							method: 'post',
+							body: JSON.stringify(postBody),
+							headers: {'Content-Type': 'application/json'}
+						});
 					}
 
 				}
