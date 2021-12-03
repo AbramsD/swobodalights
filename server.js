@@ -45,6 +45,7 @@ app.get('/startShow',
 		//console.log("In Start Show")
 		//Check if the system is up.
 		//console.log(fppAddress);
+		//console.log(process.env.SHOWURL);
 		var status;
 		var url = fppAddress + "/api/fppd/status"
 		fetch(url)
