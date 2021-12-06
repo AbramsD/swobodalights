@@ -7,6 +7,7 @@ body {
 	padding: 10px;
 	text-align: center;
 }
+
 .header {
 	width: 75%;
 }
@@ -29,12 +30,11 @@ body {
 }
 
 .loading{
-	display: inline;
+	display: none;
 	position: relative;
 	padding: 10px;
   	margin: 5px;
   	width: 75%;
-  	height: ;
 }
 
 button {
@@ -49,5 +49,8 @@ button {
 	width: 75%;
 }
 h1{
+	color: red;
+}
+h2{
 	color: red;
 }
